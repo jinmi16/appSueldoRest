@@ -7,6 +7,6 @@ var api=express.Router();
 //api.get('/pruebas-del-controlador',md_auth.ensureAuth,UserController.pruebas);
 
 api.get('/pruebas-del-controlador',UsuarioController.pruebas);
-api.get('/register',UsuarioController.saveUser);
+api.post('/register',UsuarioController.saveUser);
 
 module.exports=api;

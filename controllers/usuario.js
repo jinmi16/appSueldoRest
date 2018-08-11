@@ -13,12 +13,13 @@ function pruebas(req, res) {
 
 // insertar usuario
 function saveUser(req, res) {
+
     // creo el objeto del usuario
     var user = new User();
     // recojer parametros peticion
-    console.log(JSON.stringify(req));
+    //  console.log(JSON.stringify(req));
     var params = req.body;
-    console.log(params);
+    // console.log(params);
 
     if (params.nikname && params.password && params.nombre && params.apellido) {
         // asignar valores al objeto usuario
@@ -31,38 +32,95 @@ function saveUser(req, res) {
         user.edad = params.edad;
         user.rol = params.rol;
 
-        // ciframos contraseña
-        bcrypt.hash(params.password, null, null, function (err, hash) {
-            user.password = hash;
-            //guardar usuario en la BD
+        User.findOne({
+            email: user.email.toLowerCase()
+        }, (err, issetUser) => {
 
-            user.save((err, userStored) => {
+            if (err) {
+                res.status(500).send({
+                    mensaje: 'Error al comprobar el usuario'
+                });
 
-                if (err) {
-                    res.status(500).send({
-                        mensaje: 'Error al guardar el usuario'
+            } else {
+                
+                if (!issetUser) {
+                    // ciframos contraseña
+
+                    bcrypt.hash(params.password, null, null, function (err, hash) {
+                        user.password = hash;
+                        //guardar usuario en la BD
+                        user.save((err, userStored) => {
+                            if (err) {
+                                res.status(500).send({
+                                    mensaje: 'Error al guardar el usuario'
+                                });
+                            } else {
+                                if (!userStored) {
+                                    res.status(404).send({
+                                        mensaje: 'No se ha registrado el usuario'
+                                    });
+                                } else {
+
+                                    res.status(200).send({
+                                        user: userStored
+                                    });
+                                }
+
+                            }
+
+                        });
                     });
-                } else {
-                    if (!userStored) {
-                        res.status(404).send({
-                            mensaje: 'No se ha registrado el usuario'
-                        });
-                    } else {
 
-                        res.status(200).send({
-                            user: userStored
-                        });
-                    }
+
+                } else {
+                    res.status(200).send({
+                        mensaje: 'El usuario ya existe'
+                    });
                 }
-            });
+            }
 
         });
+
+
+
+
+        /*
+                // ciframos contraseña
+                bcrypt.hash(params.password, null, null, function (err, hash) {
+                    user.password = hash;
+                    //guardar usuario en la BD
+
+                    user.save((err, userStored) => {
+
+                        if (err) {
+                            res.status(500).send({
+                                mensaje: 'Error al guardar el usuario'
+                            });
+                        } else {
+                            if (!userStored) {
+                                res.status(404).send({
+                                    mensaje: 'No se ha registrado el usuario'
+                                });
+                            } else {
+
+                                res.status(200).send({
+                                    user: userStored
+                                });
+                            }
+                        }
+                    });
+
+                });
+
+        */
 
     } else {
         res.status(200).send({
             mensaje: 'ingresa datos correctamente'
         });
     }
+
+
 }
 
 module.exports = {
