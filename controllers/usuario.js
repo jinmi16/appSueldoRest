@@ -1,6 +1,9 @@
 'use strict'
 // modulos
 var bcrypt = require('bcrypt-nodejs');
+// servicios
+var jwt = require('../services/jwt');
+
 // modelos
 var User = require('../models/usuario');
 
@@ -145,9 +148,26 @@ function login(req, res) {
                 bcrypt.compare(password, user.password, (err, check) => {
                     if (check) {
 
+                        if (params.gettoken) {
+                            // devolvemos token
+                            res.status(200).send({
+                                token: jwt.createToken(user)
+                            });
+                        } else {
+                            res.status(200).send({
+                                user
+                            });
+
+                        }
+
+
+
+
+                        /*
                         res.status(200).send({
                             user
                         });
+                        */
                     } else {
                         res.status(404).send({
                             mensaje: 'El usuario no ha podido logearce correctamente'
@@ -161,15 +181,6 @@ function login(req, res) {
             }
         }
     });
-
-
-
-
-
-
-
-
-
 
     /*
         res.status(200).send({
