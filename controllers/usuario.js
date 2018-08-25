@@ -230,7 +230,46 @@ function updateUser(req, res) {
 
 }
 
+function getUser(req, res) {
 
+    User.find().exec((err, users) => {
+        if (err) {
+            res.status(500).send({
+                mensaje: 'error en la peticion'
+            });
+        } else {
+            if (!users) {
+                res.status(404).send({
+                    mensaje: 'no hay usuarios'
+                });
+            } else {
+                res.status(200).send(users);
+            }
+        }
+    });
+}
+
+function getUserId(req, res) {
+    var userId = req.params.id;
+    User.find({
+        _id : userId
+    }).exec((err, users) => {
+        if (err) {
+            res.status(500).send({
+                mensaje: 'error en la peticion'
+            });
+        } else {
+            if (!users) {
+                res.status(404).send({
+                    mensaje: 'no hay usuarios'
+                });
+            } else {
+                res.status(200).send(users);
+            }
+        }
+    });
+   
+}
 
 
 
@@ -241,5 +280,7 @@ module.exports = {
     pruebas,
     saveUser,
     login,
-    updateUser
+    updateUser,
+    getUser,
+    getUserId
 };
