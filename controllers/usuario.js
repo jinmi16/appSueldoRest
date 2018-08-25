@@ -271,6 +271,28 @@ function getUserId(req, res) {
    
 }
 
+function getUserSearch(req, res) {
+
+    User.find({
+        $or:[{nombre : new RegExp(req.params.q, 'i')},{apellido : new RegExp(req.params.q, 'i')}] // filtrado especial, similar a like de sql
+    }).exec((err, users) => {
+        if (err) {
+            res.status(500).send({
+                mensaje: 'error en la peticion'
+            });
+        } else {
+            if (!users) {
+                res.status(404).send({
+                    mensaje: 'no hay usuarios'
+                });
+            } else {
+                res.status(200).send(users);
+            }
+        }
+    });
+   
+}
+
 
 
 
@@ -282,5 +304,6 @@ module.exports = {
     login,
     updateUser,
     getUser,
-    getUserId
+    getUserId,
+    getUserSearch
 };

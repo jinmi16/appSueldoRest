@@ -12,5 +12,5 @@ api.post('/login',UsuarioController.login);
 api.put('/update/:id',md_auth.ensureAuth, UsuarioController.updateUser);
 api.get('/list/:id', md_auth.ensureAuth, UsuarioController.getUserId);
 api.get('/list', md_auth.ensureAuth, UsuarioController.getUser);
-
+api.get('/search/:q', md_auth.ensureAuth, UsuarioController.getUserSearch);
 module.exports=api;
