@@ -9,7 +9,7 @@ exports.createToken=function(user){
         nikname:user.nikname,
         nombre:user.nombre,
         email:user.email,
-        role:user.role,
+        rol:user.rol,
        // image:user.image,
         iat:moment().unix(),// tiempo actual
         exp:moment().add(30,'days').unix()

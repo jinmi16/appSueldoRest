@@ -293,6 +293,27 @@ function getUserSearch(req, res) {
    
 }
 
+// eliminar usuario
+function deleteUser(req, res) {
+    var userId = req.params.id;
+    User.findByIdAndRemove(userId,(err,userRemove)=>{
+        if(err){
+            res.status(500).send({
+                mensaje: 'error en la peticion'
+            });
+        }else{
+            if (!userRemove) {
+                res.status(404).send({
+                    mensaje: 'no se a borrado el usuario'
+                });
+
+            } else {
+
+                res.status(200).send(userRemove);
+            }
+        }
+    });
+}
 
 
 
@@ -305,5 +326,6 @@ module.exports = {
     updateUser,
     getUser,
     getUserId,
-    getUserSearch
+    getUserSearch,
+    deleteUser
 };
