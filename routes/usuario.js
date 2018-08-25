@@ -8,5 +8,6 @@ var api=express.Router();
 
 api.get('/pruebas-del-controlador',UsuarioController.pruebas);
 api.post('/register',UsuarioController.saveUser);
+api.post('/login',UsuarioController.login);
 
 module.exports=api;
