@@ -189,9 +189,57 @@ function login(req, res) {
         });
     */
 }
+// actualizar usuario
+function updateUser(req, res) {
+    var userId = req.params.id;// recojemos parametro de la url
+    var update = req.body;// capturamos datos a actualizar
+    if (userId != req.user.sub) {// comparamos usuario enviado por url y el usuario del token 
+        res.status(500).
+        send({
+            mensaje: 'no tienes permiso para actualizar el usuario'
+        });
+    }
+
+    User.findByIdAndUpdate(userId, update, {// actualizamos el usuario
+        new: true
+    }, (err, userUpdated) => {
+        if (err) {
+            res.status(500).send({
+                mensaje: 'error al actualizar usuario usuario'
+            });
+        } else {
+            if (!userUpdated) {
+                res.status(500).send({
+                    mensaje: 'error al actualizar usuario usuario'
+                });
+            } else {
+                res.status(200).send({
+                    user: userUpdated
+                });
+            }
+        }
+    });
+
+    /*
+    res.status(200).send({
+        mensaje: 'probando controlador de actualizar usuario',
+      //  user: req.user
+    });
+    */
+
+
+}
+
+
+
+
+
+
+
 
 module.exports = {
     pruebas,
     saveUser,
-    login
+    login,
+    updateUser
 };

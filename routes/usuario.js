@@ -9,5 +9,6 @@ api.get('/pruebas-del-controlador',md_auth.ensureAuth,UsuarioController.pruebas)
 //api.get('/pruebas-del-controlador',UsuarioController.pruebas);
 api.post('/register',UsuarioController.saveUser);
 api.post('/login',UsuarioController.login);
+api.put('/update/:id',md_auth.ensureAuth, UsuarioController.updateUser);
 
 module.exports=api;
